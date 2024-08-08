@@ -1,0 +1,28 @@
+name: Create Integration EKS Full Environment 
+
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ClusterName: "helios-integ"
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+          
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Terraform Init
+        run: terraform init
