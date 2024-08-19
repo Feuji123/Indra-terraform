@@ -31,6 +31,8 @@ jobs:
         working-directory: secrets
 
   apply:
+    needs: plan
+    if: success()
     runs-on: ubuntu-latest
          
     steps:
