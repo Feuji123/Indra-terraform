@@ -25,7 +25,7 @@ jobs:
       - name: Update terraform.tfvars with secrets
         run: |
           CONFIG_JSON="${{ secrets.SECRETS }}"
-          echo "${{ secrets.SECRETS }}" | jq . || exit 1
+          echo "${{ secrets.SECRETS }}" | jq .
           echo "ElastiCacheSettings__HostAndPort = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__HostAndPort')\"" > secrets/terraform.tfvars
           echo "ElastiCacheSettings__Ssl = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Ssl')\"" >> secrets/terraform.tfvars
           echo "ElastiCacheSettings__Password = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Password')\"" >> secrets/terraform.tfvars
@@ -48,4 +48,3 @@ jobs:
       - name: Terraform plan
         run : terraform plan  
         working-directory: secrets
-        
