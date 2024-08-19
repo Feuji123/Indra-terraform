@@ -26,20 +26,20 @@ jobs:
         run: |
           CONFIG_JSON="${{ secrets.SECRETS }}"
           
-          echo "ElastiCacheSettings__HostAndPort = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__HostAndPort')\"" > terraform/terraform.tfvars
-          echo "ElastiCacheSettings__Ssl = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Ssl')\"" >> terraform/terraform.tfvars
-          echo "ElastiCacheSettings__Password = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Password')\"" >> terraform/terraform.tfvars
-          echo "ElastiCacheSettings__TransactionBatchSize = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__TransactionBatchSize')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__QueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__QueueName')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__DeadLetterQueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__DeadLetterQueueName')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__MaxNumberOfMessages = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__MaxNumberOfMessages')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__VisibilityTimeoutSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__VisibilityTimeoutSeconds')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__WaitTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__WaitTimeSeconds')\"" >> terraform/terraform.tfvars
-          echo "SqsSettings__SleepingTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__SleepingTimeSeconds')\"" >> terraform/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__0__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__Name')\"" >> terraform/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath')\"" >> terraform/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__1__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__Name')\"" >> terraform/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath')\"" >> terraform/terraform.tfvars
+          echo "ElastiCacheSettings__HostAndPort = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__HostAndPort')\"" > secrets/terraform.tfvars
+          echo "ElastiCacheSettings__Ssl = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Ssl')\"" >> secrets/terraform.tfvars
+          echo "ElastiCacheSettings__Password = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Password')\"" >> secrets/terraform.tfvars
+          echo "ElastiCacheSettings__TransactionBatchSize = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__TransactionBatchSize')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__QueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__QueueName')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__DeadLetterQueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__DeadLetterQueueName')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__MaxNumberOfMessages = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__MaxNumberOfMessages')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__VisibilityTimeoutSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__VisibilityTimeoutSeconds')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__WaitTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__WaitTimeSeconds')\"" >> secrets/terraform.tfvars
+          echo "SqsSettings__SleepingTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__SleepingTimeSeconds')\"" >> secrets/terraform.tfvars
+          echo "TenantGroupSettings__TenantSettings__0__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__Name')\"" >> secrets/terraform.tfvars
+          echo "TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath')\"" >> secrets/terraform.tfvars
+          echo "TenantGroupSettings__TenantSettings__1__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__Name')\"" >> secrets/terraform.tfvars
+          echo "TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath')\"" >> secrets/terraform.tfvars
 
       - name: Terraform Init
         run: terraform init
