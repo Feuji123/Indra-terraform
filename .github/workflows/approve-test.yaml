@@ -22,25 +22,6 @@ jobs:
       - name: Configure AWS CLI
         run: aws configure set default.region us-east-1
 
-      - name: Update terraform.tfvars with secrets
-        run: |
-          CONFIG_JSON="${{ secrets.SECRETS }}"
-          echo "${{ secrets.SECRETS }}" | jq .
-          echo "ElastiCacheSettings__HostAndPort = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__HostAndPort')\"" > secrets/terraform.tfvars
-          echo "ElastiCacheSettings__Ssl = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Ssl')\"" >> secrets/terraform.tfvars
-          echo "ElastiCacheSettings__Password = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Password')\"" >> secrets/terraform.tfvars
-          echo "ElastiCacheSettings__TransactionBatchSize = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__TransactionBatchSize')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__QueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__QueueName')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__DeadLetterQueueName = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__DeadLetterQueueName')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__MaxNumberOfMessages = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__MaxNumberOfMessages')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__VisibilityTimeoutSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__VisibilityTimeoutSeconds')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__WaitTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__WaitTimeSeconds')\"" >> secrets/terraform.tfvars
-          echo "SqsSettings__SleepingTimeSeconds = \"$(echo "$CONFIG_JSON" | jq -r '.SqsSettings__SleepingTimeSeconds')\"" >> secrets/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__0__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__Name')\"" >> secrets/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__0__OdysseyApiBasePath')\"" >> secrets/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__1__Name = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__Name')\"" >> secrets/terraform.tfvars
-          echo "TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath = \"$(echo "$CONFIG_JSON" | jq -r '.TenantGroupSettings__TenantSettings__1__OdysseyApiBasePath')\"" >> secrets/terraform.tfvars
-
       - name: Terraform Init
         run: terraform init
         working-directory: secrets
@@ -48,3 +29,33 @@ jobs:
       - name: Terraform plan
         run : terraform plan  
         working-directory: secrets
+
+  apply:
+    runs-on: ubuntu-latest
+         
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-1
+
+      - name: Terraform Init
+        run: terraform init -reconfigure
+        working-directory: secrets
+
+      - name: Download Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve ./plan.tfplan
+        
