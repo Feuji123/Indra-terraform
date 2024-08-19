@@ -22,6 +22,10 @@ jobs:
       - name: Configure AWS CLI
         run: aws configure set default.region us-east-1
 
+      - name: Debug JSON Content
+        run: echo "${{ secrets.SECRETS }}" | jq . || exit 1
+  
+
       - name: Update terraform.tfvars with secrets
         run: |
           CONFIG_JSON="${{ secrets.SECRETS }}"
