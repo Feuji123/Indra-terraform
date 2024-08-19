@@ -22,14 +22,10 @@ jobs:
       - name: Configure AWS CLI
         run: aws configure set default.region us-east-1
 
-      - name: Debug JSON Content
-        run: echo "${{ secrets.SECRETS }}" | jq . || exit 1
-  
-
       - name: Update terraform.tfvars with secrets
         run: |
           CONFIG_JSON="${{ secrets.SECRETS }}"
-          echo "$CONFIG_JSON" | jq . || exit 1
+          echo "${{ secrets.SECRETS }}" | jq . || exit 1
           echo "ElastiCacheSettings__HostAndPort = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__HostAndPort')\"" > secrets/terraform.tfvars
           echo "ElastiCacheSettings__Ssl = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Ssl')\"" >> secrets/terraform.tfvars
           echo "ElastiCacheSettings__Password = \"$(echo "$CONFIG_JSON" | jq -r '.ElastiCacheSettings__Password')\"" >> secrets/terraform.tfvars
