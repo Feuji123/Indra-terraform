@@ -62,6 +62,6 @@ jobs:
           name: terraform-plan
 
       - name: Terraform Apply
-        run: terraform apply --auto-approve secrets/plan.tfplan
+        run: terraform apply --auto-approve /home/runner/work/Indra-terraform/Indra-terraform/plan.tfplan
         working-directory: secrets
         
